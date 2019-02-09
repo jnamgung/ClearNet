@@ -1,44 +1,29 @@
-# Connection and disconnection
-def connect_database():
-    pass
+import pyodbc
 
-def close_database():
-    pass
+class Database:
+    def __init__(self, server, database, username, password):
+        self.server = server
+        self.database = database
+        self.username = username
+        self.password = password
+        self.connection = None
 
+    def connect_database(self):
+        cnx = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + self.server 
+            + ';DATABASE=' + self.database + ';UID=' + self.username + ';PWD=' + self.password)
+        if self.connection is not None:
+            self.connection.close()
+        self.connection = cnx.cursor()
+        return
 
-# Interfacing with MySQL data
-def store_entry(host_id, session_id, source_site, dest_site, time):
-    pass
+    def close_database(self):
+        if self.connection is not None:
+            self.connection.close()
+            self.connection = None
+    
+    def store_entry(self, host_id, session_id, source_site, dest_site, time):
+        self.connection.execute()
+        self.connection.commit()
 
-def read_entry(host_id, session_id, source_site, dest_site, time):
-    pass
-
-# Counting data
-
-# Total visits of a site
-def count_site_visits(host_id, session_id, counted_site, start_time, end_time):
-    pass
-
-#Total inter-site visits by single session
-def count_session_visits(host_id, session_id, start_time, end_time):
-    pass
-
-#Total link uses
-def count_link_visits(host_id, session_id, source_site, dest_site, start_time, end_time):
-    pass
-
-# Analysis of data
-
-def most_popular_site(host_id, start_time, end_time):
-    pass
-
-def most_popular_path(host_id, start_time, end_time):
-    pass
-
-def most_active_time(host_id):
-    pass
-
-
-
-
-
+    def read_entry(self, t_id):
+        pass
