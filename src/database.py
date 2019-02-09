@@ -42,12 +42,12 @@ class Database:
         return
 
     def host_exists(self, host_id):
-        return (self.cursor.tables(table=host_id, tableType='TABLE').fetchone()
-                and self.cursor.execute('SELECT EXISTS(SELECT 1 FROM ['
-                                        + hosts_database + '] WHERE HID=['
-                                        + host_id + '] LIMIT 1)')
-                and self.cursor.tables(table='_p_' + host_id,
-                                       tableType='TABLE').fetchone())
+        self.cursor.execute('SELECT HID FROM [' + hosts_database  + '] WHERE HID=?',
+                                        host_id)
+        t = self.cursor.fetchone()
+        s = self.cursor.tables(table=host_id, tableType='TABLE').fetchone()
+        u = self.cursor.tables(table='_p_' + host_id, tableType='TABLE').fetchone()
+        return (s and t and u)
 
     def add_host(self, host_id, host_pw):
         if not self.host_exists(host_id):

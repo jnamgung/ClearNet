@@ -21,7 +21,7 @@ def count_usr(db, host, usr, startTime=date.min, endTime=date.max):
     rows = db.read_mult(host, usr, '%', '%', startTime, endTime)
     return len(rows)
 
-def count_unique_accesses(db, session_id, startTime=date.min, endTime=date.max):
+def count_unique_accesses(db, host, session_id, startTime=date.min, endTime=date.max):
     all_networks = defaultdict(int)
     all_accesses = db.read_mult(host, session_id, '%', '%', startTime, endTime)
     for row in range (0, len(all_accesses)-1):

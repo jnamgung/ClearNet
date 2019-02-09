@@ -19,15 +19,35 @@
     style="background-image: url('https://tecnico.ulisboa.pt/files/2017/01/delix-lisbon-winter-school-on-data-science-and-engineering.jpg'); background-repeat: no-repeat; height: 100%; background-position: center; background-size: cover">
     <div style="text-align:center">
         <p></p>
-        <h1 style='color:#ffffff'>Welcome!</h1>
+        <h1 style='color:#ffffff'>Welcome, {{ value }}!</h1>
 
         <p>
-            <h5 style="color: white">Enter your user info below.</h5>
+            <h5 style="color: white">Platform Analytics</h5>
         </p>
         <p>
+            <form action ='/dashboard/{{ value }}/add-platform' method="POST">
+                <input type="text" id = 'new_plat' name="new_plat" placeholder='Platform Name' maxlength='25' style='border-radius: 5px; width: 230px; border:none'/>
+                <p></p>
+                <input type="text" id = 'new_plat_url' name="new_plat_url" placeholder='Platform URL' style='border-radius: 5px; width: 230px; border:none'/>
+                <p></p>
+                <input type="submit" value='Add New Platform' style='background-color:#0f6bff; color:white; border-radius: 5px; border:none'/><br>
+            </form>
+            <p></p>
             <form action="/delete/{{value}}">
                 <input type="submit" value="Delete User" style='background-color:#0f6bff; color:white; border-radius: 5px; border:none'/>
             </form>
+            <div id='platformList'></div>
+            <script>
+                var platform_list = "{{platform_list}}";
+                list = document.createElement("ol");
+                document.getElementById("platformList").appendChild(list);
+                console.log(typeof(platform_list));
+                platform_list.forEach(element => {
+                    var node = document.createElement("li");
+                    node.innerHTML = element[0] + "</br>";
+                    list.appendChild(node); 
+                });
+            </script>
         </p>
 
     </div>
