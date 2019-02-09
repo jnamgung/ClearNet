@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <script src="paper.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script type="text/javascript" canvas='myCanvas'>
+      window.onload = function() {
+        var canvas = document.getElementById('myCanvas');
+        paper.setup(canvas);
+        paper.view.setViewSize(600,600);
+        canvas.fillColor = '#e1f7d5';
+        //NEED TO SPECIFY FOR FUNCTION:
+        //SIZE BASED ON POPULARITY
+        //COLOR BASED ON SOCIAL MEDIA
+        //INSERT IMAGE BASED ON SOCIAL MEDIA
+        function circle(size, x, y) {
+          var circle = new paper.Path.Circle(new paper.Point(x,y), size);
+          circle.strokeColor = 'black';
+          circle.fillColor = 'blue';
+        }
+        //NEED TO SPECIFY FOR FUNCTION:
+        // StrokeColor
+        // StrokeWidth BASED ON INFLUENCE DEGREE
+        //
+        //
+        function net(count) {
+          var path = new paper.Path();
+          for (var i = 0; i < count - 1; i++) {
+            console.log(i);
+            var from = new paper.Point(300, 300);
+
+            var angle = i * (360)/(count - 1)* Math.PI/180;
+            var lineX2 = 300 + Math.cos(angle) * 160;
+            var lineY2 = 300 + Math.sin(angle) * 160;
+            console.log(lineX2, lineY2);
+            var to = new paper.Point(lineX2, lineY2);
+
+            var line = new paper.Path.Line(from, to);
+
+            // var raster = new paper.Raster('logo');
+            // var raster = new Raster({
+            //   source: 'https://securecdn.pymnts.com/wp-content/uploads/2017/08/facebookpublisher-2.jpg',
+            //   position: new paper.Point(lineX2, lineY2)
+            // });
+            // raster.rescale(50, 50);
+            circle(50, lineX2, lineY2);
+            line.strokeColor = 'blue';
+            paper.view.draw();
+          }
+          circle(50, 300, 300);
+        }
+        net(4);
+        paper.view.draw();
+      }
+
+
+    </script>
+    <title>Canvas</title>
+  </head>
+  <body>
+    <!-- <img id='logo' src="https://securecdn.pymnts.com/wp-content/uploads/2017/08/facebookpublisher-2.jpg" alt="facebook-logo"> -->
+    <canvas id="myCanvas" resize='true'></canvas>
+    <!-- <div class="navbar fixed-bottom">
+      This is cool
+    </div> -->
+  </body>
+</html>
