@@ -1,4 +1,5 @@
 import pyodbc
+from datetime import date
 
 class Database:
     def __init__(self, server, database, username, password):
@@ -60,11 +61,11 @@ class Database:
         return rows
     
     def read_mult(self, host_id, session_id, source_site, dest_site, 
-                  start_time, end_time):
+                  start_time=date.min, end_time=date.max):
         query = ("SELECT SID, SSITE, DSITE, T FROM " + host_id + " WHERE "
             + "(SID LIKE ?) AND (SSITE LIKE ?) AND (DSITE LIKE ?) AND "
             + "(T BETWEEN ? AND ?)")
-        self.cursor.execute(query, [host_id, session_id, source_site, 
+        self.cursor.execute(query, [session_id, source_site, 
                                     dest_site, start_time, end_time])
         rows = self.cursor.fetchall()
         return rows
