@@ -58,5 +58,16 @@ class Database:
         self.cursor.execute(query, [session_id, time])
         rows = self.cursor.fetchall()
         return rows
+    
+    def read_mult(self, host_id, session_id, source_site, dest_site, 
+                  start_time, end_time):
+        query = ("SELECT SID, SSITE, DSITE, T FROM " + host_id + " WHERE "
+            + "(SID LIKE ?) AND (SSITE LIKE ?) AND (DSITE LIKE ?) AND "
+            + "(T BETWEEN ? AND ?)")
+        self.cursor.execute(query, [host_id, session_id, source_site, 
+                                    dest_site, start_time, end_time])
+        rows = self.cursor.fetchall()
+        return rows
 
 
+ 
