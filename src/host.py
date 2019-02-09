@@ -30,9 +30,4 @@ def count_unique_accesses(db, session_id, startTime=date.min, endTime=date.max):
         if (row == 0) or (all_accesses[row][1] != all_accesses[row-1][2]):
                 all_networks[all_accesses[row][1]] += 1
 
-    #implemented defaultdict storing all uniquely accessed networks by their
-    #domain and accessed times; row[1] & row[2] are for extracting the src domain
-    #and the target domain in the tuple returned by read_mult
-    #TODO: could use some clean up
-    #returns said dictionary
     return all_networks 
