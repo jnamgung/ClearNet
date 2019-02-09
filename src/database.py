@@ -29,7 +29,7 @@ class Database:
                                   tableType='TABLE').fetchone():
             self.cursor.execute('CREATE TABLE [' + hosts_database
                                 + '] (HID VARCHAR(32) PRIMARY KEY, '
-                                + 'HPW VARCHAR(32))')
+                                + 'HPW VARCHAR(32), SIDC INTEGER)')
             self.connection.commit()
         return
 
@@ -54,7 +54,7 @@ class Database:
             self.cursor.execute('CREATE TABLE [' + host_id + '] (SID INTEGER, '
                                 + 'SPID VARCHAR(256), DPID VARCHAR(256), T DATETIME)')
             self.cursor.execute('INSERT INTO [' + hosts_database
-                                + '] (HID, HPW) VALUES (?, ?)', [host_id, host_pw])
+                                + '] (HID, HPW, SIDC) VALUES (?, ?, 0)', [host_id, host_pw])
             self.cursor.execute('CREATE TABLE [_p_' + host_id + '] (PID VARCHAR(256) PRIMARY KEY,'
                                 + ' DSITE VARCHAR(256))')
             self.connection.commit()
@@ -76,6 +76,17 @@ class Database:
     def set_password(self, host_id, password):
         self.cursor.execute('UPDATE [' + hosts_database + '] SET HPW=? '
                             + 'WHERE HID=?', [password, host_id])
+        self.connection.commit()
+        return
+
+    def get_sid(self, host_id):
+        self.cursor.execute('SELECT SIDC FROM [' + hosts_database
+                            + '] WHERE HID=?', host_id)
+        return self.cursor.fetchone()[0]
+    
+    def inc_sid(self, host_id):
+        self.cursor.execute('UPDATE [' + hosts_database + '] SET SIDC=? '
+                            + 'WHERE HID=?', [get_sid(host_id) + 1, host_id])
         self.connection.commit()
         return
 
