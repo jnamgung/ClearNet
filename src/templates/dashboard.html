@@ -36,7 +36,7 @@
             <form action="/delete/{{value}}">
                 <input type="submit" value="Delete User" style='background-color:#0f6bff; color:white; border-radius: 5px; border:none'/>
             </form>
-            <div id='platformList'></div>
+            <div id='platformList' style="color:white"></div>
             <script>
                 var platform_list = {{platform_list|tojson}};
                 list = document.createElement("ol");
