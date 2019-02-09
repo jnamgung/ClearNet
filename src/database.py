@@ -45,55 +45,81 @@ class Database:
         return (self.cursor.tables(table=host_id, tableType='TABLE').fetchone()
                 and self.cursor.execute('SELECT EXISTS(SELECT 1 FROM ['
                                         + hosts_database + '] WHERE HID=['
-                                        + host_id + '] LIMIT 1)'))
+                                        + host_id + '] LIMIT 1)')
+                and self.cursor.tables(table='_p_' + host_id,
+                                       tableType='TABLE').fetchone())
 
     def add_host(self, host_id, host_pw):
         if not self.host_exists(host_id):
             self.cursor.execute('CREATE TABLE [' + host_id + '] (SID INTEGER, '
-                                + 'SSITE VARCHAR(256), DSITE VARCHAR(256), T DATETIME)')
+                                + 'SPID VARCHAR(256), DPID VARCHAR(256), T DATETIME)')
             self.cursor.execute('INSERT INTO [' + hosts_database
                                 + '] (HID, HPW) VALUES (?, ?)', [host_id, host_pw])
+            self.cursor.execute('CREATE TABLE [_p_' + host_id + '] (PID VARCHAR(256) PRIMARY KEY,'
+                                + ' DSITE VARCHAR(256))')
             self.connection.commit()
         return
 
     def del_host(self, host_id):
         self.cursor.execute('DELETE FROM [' + hosts_database +
-                            '] WHERE HID=\'' + host_id + '\'')
+                            '] WHERE HID=?', host_id)
         self.cursor.execute('DROP TABLE [' + host_id + ']')
+        self.cursor.execute('DROP TABLE [_p_' + host_id + ']')
         self.connection.commit()
         return
 
     def get_password(self, host_id):
         self.cursor.execute('SELECT HPW FROM [' + hosts_database
-                                   + '] WHERE HID=\'' + host_id + '\'')
+                            + '] WHERE HID=?', host_id)
         return self.cursor.fetchone()[0]
 
     def set_password(self, host_id, password):
         self.cursor.execute('UPDATE [' + hosts_database + '] SET HPW=? '
                             + 'WHERE HID=?', [password, host_id])
         self.connection.commit()
+        return
 
-    def store_entry(self, host_id, session_id, source_site, dest_site, time):
-        query = ('INSERT INTO [' + host_id + '] (SID, SSITE, DSITE, T) '
+    def set_platform(self, host_id, p_id, dest_url):
+        self.cursor.execute('MERGE INTO [_p_' + host_id + '] WITH (HOLDLOCK) AS'
+                            + ' target USING (SELECT ? AS PID) AS source ON '
+                            + '(target.PID = source.PID) WHEN MATCHED THEN '
+                            + 'UPDATE SET target.PID = source.PID, TARGET.DSITE '
+                            + '= ? WHEN NOT MATCHED THEN INSERT (PID, DSITE) '
+                            + 'VALUES (?, ?);', [p_id, dest_url, p_id, dest_url])
+        self.connection.commit()
+        return
+
+    def get_platforms(self, host_id, p_id='%'):
+        self.cursor.execute('SELECT PID, DSITE FROM [_p_' + host_id + '] WHERE '
+                                   + 'PID LIKE ?', p_id)
+        return self.cursor.fetchall()
+
+    def del_platform(self, host_id, p_id):
+        self.cursor.execute(
+            'DELETE FROM [_p_' + host_id + '] WHERE PID=?', p_id)
+        return
+
+    def store_entry(self, host_id, session_id, source_platform, dest_platform, time):
+        query = ('INSERT INTO [' + host_id + '] (SID, SPID, DPID, T) '
                  + 'VALUES(?, ?, ?, ?)')
-        vals = [session_id, source_site, dest_site, time]
+        vals = [session_id, source_platform, dest_platform, time]
         self.cursor.execute(query, *vals)
         self.connection.commit()
         return
 
     def read_entry(self, host_id, session_id, time):
-        query = ('SELECT SID, SSITE, DSITE, T FROM [' + host_id + '] WHERE '
+        query = ('SELECT SID, SPID, DPID, T FROM [' + host_id + '] WHERE '
                  + 'SID=? AND T=?')
         self.cursor.execute(query, [session_id, time])
         rows = self.cursor.fetchone()
         return rows
 
-    def read_mult(self, host_id, session_id, source_site, dest_site,
+    def read_mult(self, host_id, session_id='%', source_platform='%', dest_platform='%',
                   start_time=date.min, end_time=date.max):
-        query = ('SELECT SID, SSITE, DSITE, T FROM [' + host_id + '] WHERE '
-                 + '(SID LIKE ?) AND (SSITE LIKE ?) AND (DSITE LIKE ?) AND '
+        query = ('SELECT SID, SPID, DPID, T FROM [' + host_id + '] WHERE '
+                 + '(SID LIKE ?) AND (SPID LIKE ?) AND (DPID LIKE ?) AND '
                  + '(T BETWEEN ? AND ?)')
-        self.cursor.execute(query, [session_id, source_site, dest_site,
+        self.cursor.execute(query, [session_id, source_platform, dest_platform,
                                     start_time, end_time])
         rows = self.cursor.fetchall()
         return rows
