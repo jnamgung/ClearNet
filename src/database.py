@@ -22,8 +22,25 @@ class Database:
             self.connection = None
     
     def store_entry(self, host_id, session_id, source_site, dest_site, time):
-        self.connection.execute()
-        self.connection.commit()
+        cursor = cnx.cursor();
+        insert = ("INSERT INTO self.database (host_id, session_id, source_site, dest_site, time)"
+                  "VALUES (%(host_id)s, %(session_id)s, %(source_site)s, %(dest_site)s, %(time)s)")
+        vals = {
+            'host_id': host_id,
+            'session_id': session_id,
+            'source_site': source_site,
+            'dest_site': dest_site,
+            'time': time
+            }
+        cursor.execute(insert, vals)
+        cnx.commit()
 
-    def read_entry(self, t_id):
-        pass
+    def read_entry(self, session_id, requested_time):
+        cursor = cnx.cursor();
+        query = ("SELECT (host_id, session_id, source_site, dest_site, time)"
+                 "FROM self.database WHERE (session_id = %(session_id)s AND time=%(time)s")
+        cursor.execute(query, {'session_id': requested_tid, 'time': requested_time})
+        rows=cursor.fetchall();
+        return rows
+
+
