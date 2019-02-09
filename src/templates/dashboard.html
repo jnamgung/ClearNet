@@ -38,7 +38,7 @@
             </form>
             <div id='platformList'></div>
             <script>
-                var platform_list = "{{platform_list}}";
+                var platform_list = {{platform_list|tojson}};
                 list = document.createElement("ol");
                 document.getElementById("platformList").appendChild(list);
                 console.log(typeof(platform_list));

@@ -26,7 +26,6 @@ def dashboard_page(hid):
     platform_list = []
     for row in data:
         platform_list.append(list(row))
-    platform_list = jsonify(platform_list)
     print(platform_list)
     return render_template('dashboard.html', value=hid, platform_list=platform_list)
 
