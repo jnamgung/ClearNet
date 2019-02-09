@@ -1,7 +1,5 @@
-from flask import Flask
 from database import Database
 from datetime import date
-from http import server
 from collections import defaultdict
 
 def login (db, username, password):
