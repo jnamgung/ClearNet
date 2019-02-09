@@ -86,7 +86,7 @@ class Database:
     
     def inc_sid(self, host_id):
         self.cursor.execute('UPDATE [' + hosts_database + '] SET SIDC=? '
-                            + 'WHERE HID=?', [get_sid(host_id) + 1, host_id])
+                            + 'WHERE HID=?', [self.get_sid(host_id) + 1, host_id])
         self.connection.commit()
         return
 

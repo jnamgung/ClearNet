@@ -27,7 +27,7 @@ azdb.set_platform(host_id, "Instagram", "instagram.com")
 azdb.set_platform(host_id, "Facebook", "facebook.com")
 azdb.set_platform(host_id, "Twitter", "twitter.com")
 azdb.set_platform(host_id, "Andrew", "andrew.cmu.edu")
-print (azdb.set_platform(host_id))
+print (azdb.get_platforms(host_id))
 
 
 
