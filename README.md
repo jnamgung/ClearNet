@@ -11,5 +11,5 @@
 ***Team***
 - John Namgung: ***Back-end and Front-end Development: MySQL database/server, Azure, Python, HTML, Flask***.
 - Jason Xu: ***Back-end Development: MySQL sequencing/sorting algorithms, Azure, Python.***
-- Brian Hu: ***Front-end Development: Flask, HTML, Javascript, Paper.js.***
-- Sanjay Salem: ***Front-end Development: Flask, HTML, Javascript, Paper.js.***
+- Brian Hu: ***Front-end Development: Flask, HTML, CSS, Javascript, Paper.js.***
+- Sanjay Salem: ***Front-end Development: Flask, HTML, CSS, Javascript, Paper.js.***
