@@ -9,7 +9,7 @@
 ***Moving Forward*** We plan on fully finishing ClearNet so that brand users and prospective social media enthusiasts will be able to use our service to increase their representation and following across the multiple platforms available today. Ideally, we will be able to finish the graphics and UI for the web app so that the experience is more user-friendly and easy to use.
 
 ***Team***
-- John Namgung: ***Back-end Development: MySQL database/server, Azure, Python, HTML***.
+- John Namgung: ***Back-end and Front-end Development: MySQL database/server, Azure, Python, HTML, Flask***.
 - Jason Xu: ***Back-end Development: MySQL sequencing/sorting algorithms, Azure, Python.***
 - Brian Hu: ***Front-end Development: Flask, HTML, Javascript, Paper.js.***
 - Sanjay Salem: ***Front-end Development: Flask, HTML, Javascript, Paper.js.***
